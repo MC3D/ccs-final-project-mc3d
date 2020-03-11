@@ -41,23 +41,30 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'whitenoise.runserver_nostatic',
+    'whitenoise.runserver_nostatic', # new
     'django.contrib.staticfiles',
-    'django.contrib.sites',
+    'django.contrib.sites', # new
 
     # third party
-    'rest_framework',
-    'rest_framework.authtoken',
-    'rest_auth',
-    'allauth',
-    'allauth.account',
-    'rest_auth.registration',
+    'rest_framework', # new
+    'rest_framework.authtoken', # new
+    'rest_auth', # new
+    'allauth', # new
+    'allauth.account', # new
+    'allauth.socialaccount', # new
+    'rest_auth.registration', # new
 
     # local
-    'accounts.apps.AccountsConfig',
-    'api.apps.ApiConfig',
-    'frontend.apps.FrontendConfig',
+    'accounts.apps.AccountsConfig', # new
+    'api.apps.ApiConfig', # new
+    'frontend.apps.FrontendConfig', # new
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -161,18 +168,33 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Substituting a custom User model
-# https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#substituting-a-custom-user-model
+# https://docs.djangoproject.com/en/3.0/topics/auth/customizing/#using-a-custom-user-model-when-starting-a-project
 
 AUTH_USER_MODEL = 'accounts.User'
 
 # https://docs.djangoproject.com/en/3.0/ref/settings/#email-backend
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # https://docs.djangoproject.com/en/3.0/ref/settings/#std:setting-SITE_ID
 SITE_ID = 1
 
+# DEFAULT_FILE_STORAGE
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#amazon-s3
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
 AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+
 AWS_STORAGE_BUCKET_NAME = 'ccs-final-project-mc3d'
-AWS_S3_FILE_OVERWRITE = False
+
+# Amazon Control Lists
+# https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html
+
 AWS_DEFAULT_ACL = None
+
+# By default files with the same name will overwrite each other.
+# Set this to False to have extra characters appended.
+
+AWS_S3_FILE_OVERWRITE = False
